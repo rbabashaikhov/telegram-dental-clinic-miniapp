@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { api, getAdminToken, setAdminToken } from '../api/client';
 import { APPT_STATUS, humanDate, money, patientName, shortDate } from '../lib/format';
 import type {
@@ -90,9 +90,14 @@ export function AdminPage({ preview = false }: { preview?: boolean }) {
     <div className="admin-shell">
       <header className="admin-head">
         <div>
-          <p className="eyebrow">{preview ? 'Sales demo · read-only' : 'Admin console'}</p>
+          <p className="eyebrow">{preview ? 'Кабинет клиники · только чтение' : 'Admin console'}</p>
           <h1>DentalCare</h1>
         </div>
+        {preview && (
+          <Link className="btn btn-secondary" to="/">
+            Открыть клиентское приложение
+          </Link>
+        )}
         {!preview && (
           <form
             className="token-row"

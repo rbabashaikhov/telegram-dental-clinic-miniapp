@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { api } from '../api/client';
 import { TabBar } from '../components/TabBar';
@@ -6,6 +6,31 @@ import { usePortal } from '../context/PortalContext';
 import { addDays, humanDate, money, todayIso } from '../lib/format';
 import type { Doctor, Service, TimeSlot } from '../types';
 import { REASONS, SPECIALTY_LABEL } from '../types';
+
+function goBack(navigate: ReturnType<typeof useNavigate>) {
+  if (window.history.length > 1) navigate(-1);
+  else navigate('/');
+}
+
+function ReasonChipCarousel({ children }: { children: ReactNode }) {
+  const rowRef = useRef<HTMLDivElement>(null);
+  return (
+    <div className="chip-carousel">
+      <div className="chip-row" ref={rowRef}>
+        {children}
+      </div>
+      <span className="chip-carousel-fade" aria-hidden="true" />
+      <button
+        type="button"
+        className="chip-carousel-hint"
+        aria-label="Ещё причины обращения"
+        onClick={() => rowRef.current?.scrollBy({ left: 140, behavior: 'smooth' })}
+      >
+        ›
+      </button>
+    </div>
+  );
+}
 
 export function BookPage() {
   const [params] = useSearchParams();
@@ -108,12 +133,15 @@ export function BookPage() {
 
   return (
     <div className="page">
+      <button type="button" className="back-nav" onClick={() => goBack(navigate)}>
+        ← Назад
+      </button>
       <p className="eyebrow">{item ? 'Запись на этап лечения' : rescheduleId ? 'Перенос визита' : 'Новая запись'}</p>
       <h1>{item ? item.title : 'Выберите причину обращения'}</h1>
       {item && <p className="muted">Контекст плана сохраняется: этап не потеряется после записи.</p>}
 
       {!item && !rescheduleId && (
-        <div className="chip-row">
+        <ReasonChipCarousel>
           {REASONS.map((row) => (
             <button
               key={row.id}
@@ -128,7 +156,7 @@ export function BookPage() {
               {row.label}
             </button>
           ))}
-        </div>
+        </ReasonChipCarousel>
       )}
 
       {filteredServices.length > 1 && (
@@ -218,8 +246,12 @@ export function BookPage() {
 
 export function BookDonePage() {
   const { portal } = usePortal();
+  const navigate = useNavigate();
   return (
     <div className="page">
+      <button type="button" className="back-nav" onClick={() => goBack(navigate)}>
+        ← Назад
+      </button>
       <div className="card" data-demo-tour="book-done">
         <p className="eyebrow">Готово</p>
         <h1>Запись сохранена</h1>

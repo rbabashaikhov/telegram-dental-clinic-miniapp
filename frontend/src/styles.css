@@ -246,6 +246,17 @@ p {
   color: var(--muted);
 }
 
+.back-nav {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  min-height: 40px;
+  padding: 8px 4px;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
 .row-actions {
   display: flex;
   gap: 8px;
@@ -416,6 +427,60 @@ p {
   gap: 8px;
   overflow-x: auto;
   padding-bottom: 4px;
+  padding-inline-end: 40px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+}
+
+.chip-row::-webkit-scrollbar {
+  display: none;
+}
+
+.chip-carousel {
+  position: relative;
+}
+
+.chip-carousel-fade {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 48px;
+  height: 100%;
+  background: linear-gradient(to right, transparent, var(--bg));
+}
+
+.chip-carousel-hint {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  min-width: 40px;
+  min-height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+@media (min-width: 768px) {
+  .chip-row {
+    flex-wrap: wrap;
+    overflow: visible;
+    padding-inline-end: 0;
+    touch-action: auto;
+  }
+
+  .chip-carousel-fade,
+  .chip-carousel-hint {
+    display: none;
+  }
 }
 
 .chip,
@@ -549,7 +614,18 @@ input[type='text'] {
   display: flex;
   gap: 8px;
   justify-content: flex-end;
+  align-items: center;
   margin-bottom: 8px;
+}
+
+.demo-badge {
+  margin-right: auto;
+  background: var(--accent);
+  color: #f7fffd;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .demo-chrome a,
@@ -559,6 +635,19 @@ input[type='text'] {
   padding: 8px 12px;
   border: 1px solid var(--line);
   font-size: 0.82rem;
+}
+
+.demo-chrome a.demo-chrome-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--surface);
 }
 
 .demo-modal-layer,
